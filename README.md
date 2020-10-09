@@ -10,7 +10,7 @@ websites host a tpc.googlesyndication frame, this can function as a powerful
 tracking primitive.
 
 Some ad producers put more information into the frame than others, so in some
-cases, more sensitive information can be leaked. See the video for a
+cases, more sensitive information can be leaked. See the [video](https://files.catbox.moe/aidw96.mp4) for a
 demonstration.
 
 Note: As best as I can tell, it is not the website that contains the vulnerability
