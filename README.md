@@ -82,6 +82,12 @@ is the only reason I found this vulnerability.
 Thanks also to those close to me who comforted me during my little ethical
 crisis leading up to disclosure.
 
+# Credit
+I independently discovered this XSS vector on Jan 26, 2020.
+[@simps0n](https://twitter.com/simps0n) demonstrated the same vector in a
+(tweet)[https://twitter.com/simps0n/status/996440354776928256] nearly two years
+before me, on May 15, 2018.
+
 ## Disclosure Timeline
 * Sun, 26 Jan 2020 
 Initial report of a XSS in tpc.googlesyndication through the URL fragment of
@@ -227,3 +233,6 @@ I notify Firefox of my plan to disclose publicly in a week.
 Notify Google of my plan to publicly disclose:
 > I will be publicly disclosing next week on Friday.
 Information on the web extentions I intended to create was included.
+
+* Oct 9, 2020
+Published this git and [this](https://twitter.com/bemodtwz/status/1314572381751595009) tweet.
