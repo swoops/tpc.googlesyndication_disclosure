@@ -85,7 +85,7 @@ crisis leading up to disclosure.
 # Credit
 I independently discovered this XSS vector on Jan 26, 2020.
 [@simps0n](https://twitter.com/simps0n) demonstrated the same vector in a
-(tweet)[https://twitter.com/simps0n/status/996440354776928256] nearly two years
+[tweet](https://twitter.com/simps0n/status/996440354776928256) nearly two years
 before me, on May 15, 2018.
 
 ## Disclosure Timeline
