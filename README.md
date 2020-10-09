@@ -88,6 +88,20 @@ I independently discovered this XSS vector on Jan 26, 2020.
 [tweet](https://twitter.com/simps0n/status/996440354776928256) nearly two years
 before me, on May 15, 2018.
 
+The vector was discovered even before [@simps0n](https://twitter.com/simps0n) by
+Erik Dubbelboer nearly 4 years before me. While the XSS was demonstrated,
+Google did not see a security impact. From [Erik
+Dubbelboer's](https://blog.dubbelboer.com/2016/06/10/embed-into-tpc-googlesyndication-com.html)
+post:
+
+> In my example exploit.js just contains an alert statement to show the domain.
+> In theory this could contain any code.
+> 
+> This has been reported to google but they said they don’t care what is run on
+> the domain. I guess they never place any sensitive cookies on this domain and
+> don’t expect others to do either.
+
+
 ## Disclosure Timeline
 * Sun, 26 Jan 2020 
 Initial report of a XSS in tpc.googlesyndication through the URL fragment of
