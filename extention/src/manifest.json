@@ -1,0 +1,16 @@
+{
+
+  "description": "Clearn name of tpc.googlesyndication.com frames. This is self-hosted version.",
+  "manifest_version": 2,
+  "name": "No Name For TPC (self-hosted)",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://tpc.googlesyndication.com/safeframe/*"],
+      "js": ["content.js"],
+      "run_at" : "document_start",
+      "all_frames" : true
+    }
+  ]
+
+}
