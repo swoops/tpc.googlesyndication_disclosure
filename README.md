@@ -1,5 +1,8 @@
 # Public Disclosure of Tracking Primitive in tpc.googlesyndication.com
 
+Update: Looks like the default behavior will be fixed on Oct 26:
+[reference](https://github.com/swoops/tpc.googlesyndication_disclosure).
+
 The tpc.googlesyndication.com allows arbitrary JavaScript to be executed in its
 origin. This appears to be by design so that ad producers can put unique
 information into a tpc.googlesyndication frame. A malicious website with access
